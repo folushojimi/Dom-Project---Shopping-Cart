@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+</head>
+
+<body>
+    
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .item {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .heart {
+        color: #ccc;
+        cursor: pointer;
+      }
+      .heart.clicked {
+        color: red;
+      }
+    </style>
+    </head>
+    <body>
+    <div id="cart">
+      <!-- Items will be added here dynamically -->
+    </div>
+    
+    <script>
+      const items = [
+        { id: 1, name: "Product 1", price: 10, quantity: 2 },
+        { id: 2, name: "Product 2", price: 20, quantity: 1 },
+        { id: 3, name: "Product 3", price: 15, quantity: 3 }
+      ];
+    
+      const cartElement = document.getElementById("cart");
+    
+      function renderCart() {
+        cartElement.innerHTML = "";
+        let totalPrice = 0;
+        items.forEach(item => {
+          const itemElement = document.createElement("div");
+          itemElement.classList.add("item");
+          itemElement.innerHTML = `
+            <span>${item.name}</span>
+            <button onclick="decreaseQuantity(${item.id})">-</button>
+            <span>${item.quantity}</span>
+            <button onclick="increaseQuantity(${item.id})">+</button>
+            <span>$${item.price * item.quantity}</span>
+            <button onclick="removeItem(${item.id})">Remove</button>
+            <span class="heart" onclick="toggleLike(${item.id})">&#10084;</span>
+          `;
+          if (item.liked) {
+            itemElement.querySelector(".heart").classList.add("clicked");
+          }
+          cartElement.appendChild(itemElement);
+          totalPrice += item.price * item.quantity;
+        });
+        cartElement.innerHTML += `<div>Total Price: $${totalPrice}</div>`;
+      }
+    
+      function decreaseQuantity(id) {
+        const item = items.find(item => item.id === id);
+        if (item.quantity > 1) {
+          item.quantity--;
+          renderCart();
+        }
+      }
+    
+      function increaseQuantity(id) {
+        const item = items.find(item => item.id === id);
+        item.quantity++;
+        renderCart();
+      }
+    
+      function removeItem(id) {
+        const index = items.findIndex(item => item.id === id);
+        items.splice(index, 1);
+        renderCart();
+      }
+    
+      function toggleLike(id) {
+        const item = items.find(item => item.id === id);
+        item.liked = !item.liked;
+        renderCart();
+      }
+    
+      renderCart();
+    </script>
+    </body>
+    </html>
+
+</body>
+</html>
